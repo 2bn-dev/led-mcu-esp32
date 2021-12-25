@@ -14,6 +14,8 @@
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
 #include "esp_log.h"
+#include "driver/uart.h"
+
 
 #define HTTPD_401	"401 UNAUTHORIZED"    
 
@@ -25,6 +27,7 @@ static const char *TAG = "webserver";
 
 #define WIFI_MAXIMUM_RETRY 10
 
+const uart_port_t uart_num = UART_NUM_1;
 
 
 
@@ -165,6 +168,19 @@ void wifi_init_sta(void)
 }
 
 
+static void uart_init(){
+	uart_config_t uart_config = {
+	    .baud_rate = 115200,
+	    .data_bits = UART_DATA_8_BITS,
+	    .parity = UART_PARITY_DISABLE,
+	    .stop_bits = UART_STOP_BITS_1,
+	    .flow_ctrl = UART_HW_FLOWCTRL_CTS_RTS,
+	    .rx_flow_ctrl_thresh = 122,
+	};
+	// Configure UART parameters
+	ESP_ERROR_CHECK(uart_param_config(uart_num, &uart_config));
+}
+
  static httpd_handle_t start_webserver(void)
 {
     httpd_handle_t server = NULL;
@@ -216,6 +232,7 @@ void app_main(void)
 {
     static httpd_handle_t server = NULL;
 
+    uart_init();
     //Initialize NVS
     ESP_ERROR_CHECK(nvs_flash_init());
     ESP_ERROR_CHECK(esp_netif_init());

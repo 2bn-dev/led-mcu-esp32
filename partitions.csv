@@ -6,5 +6,6 @@ factory,  app,  factory,  0x10000,  1M
 ota_0,    app,  ota_0,    ,         1M
 ota_1,    app,  ota_1,    ,         1M
 nvs_key,  data, nvs_keys, ,        0x1000
+spiffs_f, data, spiffs,   ,         1M
 spiffs_0, data, spiffs,   ,         1M
 spiffs_1, data, spiffs,   ,         1M
