@@ -1,5 +1,5 @@
-
 #include "webserver.h"
+#include "piezo.h"
 
 
 static const char *TAG = "webserver";
@@ -27,25 +27,10 @@ static esp_err_t hello_get_handler(httpd_req_t *req){
 		free(buf);
 	}
 
-	const char* resp_str = (const char*) req->user_ctx;
+	const char* resp_str = "hello beep";
 	httpd_resp_send(req, resp_str, HTTPD_RESP_USE_STRLEN);
-
-	/*
-	bool piezo_en = false;
-
-	for(uint x = 0; x < 2700/5; x++){
-		if(piezo_en){
-			gpio_pulldown_en(PIN_PIEZO);
-		}else{
-			gpio_pulldown_dis(PIN_PIEZO);
-		}
-
-		piezo_en = !piezo_en;
-		usleep(1000000/2700);
-	}
-	gpio_pulldown_dis(PIN_PIEZO);
-	*/
-
+	piezo_beep(250);
+	
 	return ESP_OK;
 }
 
@@ -53,6 +38,7 @@ static const httpd_uri_t hello = {
 	.uri       = "/hello",
 	.method    = HTTP_GET,
 	.handler   = hello_get_handler,
+	.user_ctx  = NULL,
 };
 
 static httpd_handle_t start_webserver(void){

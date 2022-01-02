@@ -15,6 +15,7 @@
 #include "driver/gpio.h"
 #include "wifi.h"
 #include "webserver.h"
+#include "piezo.h"
 
 
 #define PIN_PIEZO 23
@@ -40,17 +41,7 @@ static void uart_init(){
 
 void app_main(void){
 	uart_init();
-
-	gpio_config_t piezo_conf = {};
-	piezo_conf.intr_type = GPIO_INTR_DISABLE;
-	piezo_conf.mode = GPIO_MODE_DISABLE;
-	piezo_conf.pin_bit_mask = PIN_PIEZO_MASK;
-	piezo_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
-	piezo_conf.pull_up_en = GPIO_PULLUP_DISABLE;
-	gpio_config(&piezo_conf);
-	gpio_set_pull_mode(PIN_PIEZO, GPIO_PULLDOWN_ONLY);
-	gpio_set_drive_capability(PIN_PIEZO, GPIO_DRIVE_CAP_MAX);
-
+	piezo_init();
 
 	//Initialize NVS
 	ESP_ERROR_CHECK(nvs_flash_init());
