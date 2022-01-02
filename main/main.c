@@ -42,6 +42,9 @@ static void uart_init(){
 void app_main(void){
 	uart_init();
 	piezo_init();
+	piezo_beep(50);
+	usleep(50000);
+	piezo_beep(50);
 
 	//Initialize NVS
 	ESP_ERROR_CHECK(nvs_flash_init());
